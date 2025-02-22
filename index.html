@@ -4,17 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows Settings Links</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        /* Container Styling */
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Heading Styling */
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Link Styling */
+        a {
+            display: block;
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+            cursor: pointer; /* Ensure the links look clickable */
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Windows Settings and Browser Actions</h1>
-        <a href="javascript:(function(){var s=document.createElement('script');s.src='ms-settings:sound';document.body.appendChild(s);})();">Sound</a>
-        <a href="javascript:(function(){var s=document.createElement('script');s.src='ms-settings:apps-volume';document.body.appendChild(s);})();">Volume Mixer</a>
-        <a href="javascript:(function(){var s=document.createElement('script');s.src='ms-settings:privacy-webcam';document.body.appendChild(s);})();">Camera</a>
-        <a href="javascript:(function(){var s=document.createElement('script');s.src='ms-settings:network-wifi';document.body.appendChild(s);})();">Wi-Fi</a>
+
+        <!-- Sound -->
+        <a href="javascript:(function(){var a=document.createElement('a');a.href='ms-settings:sound';a.innerHTML='Open Sound Settings';document.body.appendChild(a);if(document.createEvent){var event=document.createEvent('MouseEvents');event.initEvent('click',true,true);a.dispatchEvent(event);}else if(a.click){a.click();}document.body.removeChild(a);})();">Sound</a>
+
+        <!-- Volume Mixer -->
+        <a href="javascript:(function(){var a=document.createElement('a');a.href='ms-settings:apps-volume';a.innerHTML='Open Volume Mixer';document.body.appendChild(a);if(document.createEvent){var event=document.createEvent('MouseEvents');event.initEvent('click',true,true);a.dispatchEvent(event);}else if(a.click){a.click();}document.body.removeChild(a);})();">Volume Mixer</a>
+
+        <!-- Camera -->
+        <a href="javascript:(function(){var a=document.createElement('a');a.href='ms-settings:privacy-webcam';a.innerHTML='Open Camera Settings';document.body.appendChild(a);if(document.createEvent){var event=document.createEvent('MouseEvents');event.initEvent('click',true,true);a.dispatchEvent(event);}else if(a.click){a.click();}document.body.removeChild(a);})();">Camera</a>
+
+        <!-- Wi-Fi -->
+        <a href="javascript:(function(){var a=document.createElement('a');a.href='ms-settings:network-wifi';a.innerHTML='Open Wi-Fi Settings';document.body.appendChild(a);if(document.createEvent){var event=document.createEvent('MouseEvents');event.initEvent('click',true,true);a.dispatchEvent(event);}else if(a.click){a.click();}document.body.removeChild(a);})();">Wi-Fi</a>
+
+        <!-- Join Session From Microsoft Edge -->
         <a href="microsoft-edge:https://app.discuss.io/338398/d" target="_blank">Join Session From Microsoft Edge</a>
+
+        <!-- Join Session From Chrome -->
         <a href="chrome:https://app.discuss.io/338398/d" target="_blank">Join Session From Chrome</a>
+
+        <!-- Allow Camera and Microphone Access -->
         <a href="chrome://settings/content/siteDetails?site=https%3A%2F%2Fapp.discuss.io/338398/d" target="_blank">Allow Camera and Microphone Access</a>
     </div>
 </body>
