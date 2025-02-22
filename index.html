@@ -75,6 +75,17 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        /* Alert Box Styling */
+        .alert {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -102,14 +113,29 @@
         <!-- Allow Camera and Microphone Access -->
         <button onclick="openChromeSettings()">Allow Camera and Microphone Access</button>
 
+        <!-- Alert Box for Fallback Instructions -->
+        <div class="alert" id="fallbackAlert" style="display:none;">
+            <p>
+                Unable to open Chrome settings automatically. Please follow these steps:
+            </p>
+            <ol>
+                <li>Open Google Chrome.</li>
+                <li>Navigate to <code>chrome://settings/</code>.</li>
+                <li>Scroll down to <strong>Privacy and security</strong> > <strong>Site Settings</strong>.</li>
+                <li>Click on <strong>Permissions</strong>.</li>
+                <li>Search for <code>https://app.discuss.io/338398/d</code>.</li>
+                <li>Adjust camera and microphone permissions as needed.</li>
+            </ol>
+        </div>
+
         <script>
             function openChromeSettings() {
                 try {
                     // Attempt to open the Chrome settings page
                     window.open('chrome://settings/content/siteDetails?site=https://app.discuss.io/338398/d', '_blank');
                 } catch (e) {
-                    // Fallback if the above fails
-                    alert('Unable to open Chrome settings automatically. Please manually navigate to:\n\nchrome://settings/content/siteDetails?site=https://app.discuss.io/338398/d');
+                    // Show fallback alert if the attempt fails
+                    document.getElementById('fallbackAlert').style.display = 'block';
                 }
             }
         </script>
