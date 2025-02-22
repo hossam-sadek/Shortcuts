@@ -56,6 +56,25 @@
         a:hover {
             color: #0056b3;
         }
+
+        /* Button Styling */
+        button {
+            display: block;
+            margin: 10px auto; /* Center the button */
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -80,8 +99,20 @@
         <!-- Join Session From Chrome -->
         <a href="chrome:https://app.discuss.io/338398/d" target="_blank">Join Session From Chrome</a>
 
-<!-- Allow Camera and Microphone Access -->
-<a href="#" onclick="window.location='chrome://settings/content/siteDetails?site=https://app.discuss.io/338398/d';">Allow Camera and Microphone Access</a>
+        <!-- Allow Camera and Microphone Access -->
+        <button onclick="openChromeSettings()">Allow Camera and Microphone Access</button>
+
+        <script>
+            function openChromeSettings() {
+                try {
+                    // Attempt to open the Chrome settings page
+                    window.open('chrome://settings/content/siteDetails?site=https://app.discuss.io/338398/d', '_blank');
+                } catch (e) {
+                    // Fallback if the above fails
+                    alert('Unable to open Chrome settings automatically. Please manually navigate to:\n\nchrome://settings/content/siteDetails?site=https://app.discuss.io/338398/d');
+                }
+            }
+        </script>
     </div>
 </body>
 </html>
