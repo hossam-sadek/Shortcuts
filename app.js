@@ -1,11 +1,28 @@
 // Initialize the QR code scanner
 let html5QrcodeScanner;
 
+// Function to check and request camera access
+async function checkCameraAccess() {
+  const messageElement = document.getElementById("message");
+
+  try {
+    // Request camera access
+    await navigator.mediaDevices.getUserMedia({ video: true });
+    console.log("Camera access granted.");
+    return true;
+  } catch (error) {
+    console.error("Camera access denied:", error.message);
+    messageElement.textContent = "Camera access denied. Please grant camera permissions.";
+    return false;
+  }
+}
+
+// Function to start the QR code scanner
 function startScanner() {
   const qrScannerContainer = document.getElementById("qrScannerContainer");
   const messageElement = document.getElementById("message");
 
-  console.log("Initializing QR code scanner...");
+  console.log("Starting QR code scanner...");
 
   // Configure the scanner
   html5QrcodeScanner = new Html5Qrcode("qrScannerContainer");
@@ -20,6 +37,7 @@ function startScanner() {
     .then(() => {
       console.log("QR code scanner started successfully.");
       messageElement.textContent = "Point your camera at the QR code to scan.";
+      document.getElementById("startCameraButton").style.display = "none"; // Hide the start button
     })
     .catch((error) => {
       console.error("Error starting QR code scanner:", error);
@@ -139,8 +157,25 @@ function showManualInput() {
   });
 }
 
-// Start the QR code scanner when the page loads
-window.addEventListener("load", () => {
-  console.log("Page loaded. Attempting to start QR code scanner...");
+// Start the QR code scanner when the "Start Camera" button is clicked
+document.getElementById("startCameraButton").addEventListener("click", async () => {
+  const messageElement = document.getElementById("message");
+  messageElement.textContent = "Attempting to start the camera...";
+
+  // Check camera access
+  if (!await checkCameraAccess()) {
+    messageElement.textContent = "Camera access denied. Please grant camera permissions.";
+    return;
+  }
+
+  // Start the scanner
   startScanner();
+});
+
+// Start the QR code scanner when the page loads (optional)
+window.addEventListener("load", async () => {
+  console.log("Page loaded. Attempting to start QR code scanner...");
+  if (await checkCameraAccess()) {
+    startScanner();
+  }
 });
