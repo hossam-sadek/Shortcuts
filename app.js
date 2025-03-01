@@ -5,6 +5,8 @@ function startScanner() {
   const qrScannerContainer = document.getElementById("qrScannerContainer");
   const messageElement = document.getElementById("message");
 
+  console.log("Initializing QR code scanner...");
+
   // Configure the scanner
   html5QrcodeScanner = new Html5Qrcode("qrScannerContainer");
 
@@ -15,6 +17,10 @@ function startScanner() {
     handleQrCodeScanned,
     handleError
   )
+    .then(() => {
+      console.log("QR code scanner started successfully.");
+      messageElement.textContent = "Point your camera at the QR code to scan.";
+    })
     .catch((error) => {
       console.error("Error starting QR code scanner:", error);
       messageElement.textContent = "Unable to start the QR code scanner. Please check your camera permissions.";
@@ -26,6 +32,8 @@ function handleQrCodeScanned(decodedText) {
   const messageElement = document.getElementById("message");
 
   try {
+    console.log("Scanned QR Code Data:", decodedText);
+
     // Parse the JSON data from the QR code
     const jsonData = JSON.parse(decodedText);
     if (!jsonData.sessions || jsonData.sessions.length === 0) {
@@ -58,7 +66,7 @@ function handleQrCodeScanned(decodedText) {
 function handleError(error) {
   console.error("QR code scanner error:", error);
   const messageElement = document.getElementById("message");
-  messageElement.textContent = "Error scanning QR code. Please try again.";
+  messageElement.textContent = "Error scanning QR code. Please ensure your camera is working and try again.";
 }
 
 // Function to create a local notification
@@ -90,5 +98,6 @@ if ("Notification" in window && Notification.permission !== "granted") {
 
 // Start the QR code scanner when the page loads
 window.addEventListener("load", () => {
+  console.log("Page loaded. Attempting to start QR code scanner...");
   startScanner();
 });
