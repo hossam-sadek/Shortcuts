@@ -47,12 +47,28 @@
     .manual-input button:hover {
       background-color: #0056b3;
     }
+    #startCameraButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #startCameraButton:hover {
+      background-color: #e64a19;
+    }
   </style>
 </head>
 <body>
   <h1>Discuss.io Alarm Sync</h1>
   <div id="qrScannerContainer"></div>
-  <div class="message" id="message">Point your camera at the QR code to scan.</div>
+  <div class="message" id="message">Tap the button below to start the camera.</div>
+
+  <!-- Start Camera Button (Fallback for iOS) -->
+  <button id="startCameraButton">Start Camera</button>
 
   <!-- Manual Input Fallback -->
   <div class="manual-input" id="manualInputContainer">
