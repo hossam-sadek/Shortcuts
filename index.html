@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discuss.io Alarm Sync</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-scanner-element@2.0.0/dist/qrcode-scanner.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 15px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    qrcode-scanner {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Discuss.io Alarm Sync</h1>
+  <qrcode-scanner id="qrScanner" result-format="json" on-qrcode-scanned="handleQrCodeScanned(event)"></qrcode-scanner>
+  <div class="message" id="message"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
