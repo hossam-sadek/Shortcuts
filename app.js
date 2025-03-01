@@ -1,11 +1,33 @@
+// Initialize the QR code scanner
+let html5QrcodeScanner;
+
+function startScanner() {
+  const qrScannerContainer = document.getElementById("qrScannerContainer");
+  const messageElement = document.getElementById("message");
+
+  // Configure the scanner
+  html5QrcodeScanner = new Html5Qrcode("qrScannerContainer");
+
+  // Start the camera
+  html5QrcodeScanner.start(
+    { facingMode: "environment" }, // Use the back camera
+    { fps: 10, qrbox: 200 }, // Scanner configuration
+    handleQrCodeScanned,
+    handleError
+  )
+    .catch((error) => {
+      console.error("Error starting QR code scanner:", error);
+      messageElement.textContent = "Unable to start the QR code scanner. Please check your camera permissions.";
+    });
+}
+
 // Function to handle QR code scanning
-function handleQrCodeScanned(event) {
-  const qrData = event.detail;
+function handleQrCodeScanned(decodedText) {
   const messageElement = document.getElementById("message");
 
   try {
     // Parse the JSON data from the QR code
-    const jsonData = JSON.parse(qrData);
+    const jsonData = JSON.parse(decodedText);
     if (!jsonData.sessions || jsonData.sessions.length === 0) {
       messageElement.textContent = "No sessions found in the QR code.";
       return;
@@ -32,7 +54,14 @@ function handleQrCodeScanned(event) {
   }
 }
 
-// Function to create a local notification (for testing purposes)
+// Function to handle errors during scanning
+function handleError(error) {
+  console.error("QR code scanner error:", error);
+  const messageElement = document.getElementById("message");
+  messageElement.textContent = "Error scanning QR code. Please try again.";
+}
+
+// Function to create a local notification
 function createNotification(sessionId, projectName, alarmTime, sFlagLink) {
   const title = `${sessionId} - ${projectName}`;
   const options = {
@@ -58,3 +87,8 @@ function createNotification(sessionId, projectName, alarmTime, sFlagLink) {
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
+
+// Start the QR code scanner when the page loads
+window.addEventListener("load", () => {
+  startScanner();
+});
