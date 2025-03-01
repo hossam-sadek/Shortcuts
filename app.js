@@ -1,77 +1,28 @@
-// Initialize the QR code scanner
-let html5QrcodeScanner;
-
-// Function to check and request camera access
-async function checkCameraAccess() {
+// Function to decode and process session data from the URL
+function processSyncData() {
   const messageElement = document.getElementById("message");
 
-  try {
-    // Request camera access
-    await navigator.mediaDevices.getUserMedia({ video: true });
-    console.log("Camera access granted.");
-    return true;
-  } catch (error) {
-    console.error("Camera access denied:", error.message);
-    messageElement.textContent = "Camera access denied. Please grant camera permissions.";
-    return false;
-  }
-}
+  // Get the query parameter from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const encodedData = urlParams.get("data");
 
-// Function to start the QR code scanner
-function startScanner() {
-  const qrScannerContainer = document.getElementById("qrScannerContainer");
-  const messageElement = document.getElementById("message");
-
-  console.log("Attempting to start the camera...");
-
-  // Clean up any existing scanner
-  if (html5QrcodeScanner) {
-    html5QrcodeScanner.stop().then(() => {
-      console.log("Existing QR code scanner stopped.");
-    }).catch((error) => {
-      console.error("Error stopping existing QR code scanner:", error);
-    });
+  if (!encodedData) {
+    messageElement.textContent = "No session data found in the URL.";
+    return;
   }
 
-  // Initialize the scanner
-  html5QrcodeScanner = new Html5Qrcode("qrScannerContainer");
-
-  // Start the camera
-  html5QrcodeScanner.start(
-    { facingMode: "environment" }, // Use the back camera
-    { fps: 10, qrbox: 200 }, // Scanner configuration
-    handleQrCodeScanned,
-    handleError
-  )
-    .then(() => {
-      console.log("QR code scanner started successfully.");
-      messageElement.textContent = "Point your camera at the QR code to scan.";
-      document.getElementById("startCameraButton").style.display = "none"; // Hide the start button
-    })
-    .catch((error) => {
-      console.error("Error starting QR code scanner:", error);
-      messageElement.textContent = "Unable to start the QR code scanner. Please use the manual input below.";
-      showManualInput();
-    });
-}
-
-// Function to handle QR code scanning
-function handleQrCodeScanned(decodedText) {
-  const messageElement = document.getElementById("message");
-
   try {
-    console.log("Scanned QR Code Data:", decodedText);
+    // Decode the Base64 data and parse it as JSON
+    const decodedData = atob(encodedData); // Base64 decode
+    const jsonData = JSON.parse(decodedData);
 
-    // Parse the JSON data from the QR code
-    const jsonData = JSON.parse(decodedText);
     if (!jsonData.sessions || jsonData.sessions.length === 0) {
-      messageElement.textContent = "No sessions found in the QR code.";
+      messageElement.textContent = "No sessions found in the provided data.";
       return;
     }
 
-    // Display the decoded session data
-    messageElement.textContent = "Decoded session data successfully!";
     console.log("Decoded Session Data:", jsonData.sessions);
+    messageElement.textContent = "Session data processed successfully!";
 
     // Create alarms for each session
     jsonData.sessions.forEach((session, index) => {
@@ -85,17 +36,9 @@ function handleQrCodeScanned(decodedText) {
       createNotification(session.sessionId, session.projectName, alarmTime, session.sFlagLink);
     });
   } catch (error) {
-    messageElement.textContent = "Invalid QR code data. Please try again.";
-    console.error("Error decoding QR code data:", error.message);
+    messageElement.textContent = "Invalid session data. Please try again.";
+    console.error("Error decoding session data:", error.message);
   }
-}
-
-// Function to handle errors during scanning
-function handleError(error) {
-  console.error("QR code scanner error:", error);
-  const messageElement = document.getElementById("message");
-  messageElement.textContent = "Error scanning QR code. Please try again or use the manual input below.";
-  showManualInput();
 }
 
 // Function to create a local notification
@@ -125,66 +68,8 @@ if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
 }
 
-// Show the manual input container
-function showManualInput() {
-  const manualInputContainer = document.getElementById("manualInputContainer");
-  manualInputContainer.style.display = "block";
-
-  // Handle manual input submission
-  document.getElementById("submitManualInput").addEventListener("click", () => {
-    const manualInput = document.getElementById("manualInput").value.trim();
-    if (!manualInput) {
-      alert("Please enter valid JSON data.");
-      return;
-    }
-
-    try {
-      const jsonData = JSON.parse(manualInput);
-      if (!jsonData.sessions || jsonData.sessions.length === 0) {
-        alert("No sessions found in the provided JSON data.");
-        return;
-      }
-
-      console.log("Manually entered session data:", jsonData.sessions);
-      document.getElementById("message").textContent = "Manually entered session data processed successfully!";
-
-      // Create alarms for each session
-      jsonData.sessions.forEach((session, index) => {
-        const alarmTime = new Date(session.alarmTime);
-        if (alarmTime < new Date()) {
-          console.warn(`Skipping session ${session.sessionId} as its alarm time has already passed.`);
-          return;
-        }
-
-        // Create a notification for the session
-        createNotification(session.sessionId, session.projectName, alarmTime, session.sFlagLink);
-      });
-    } catch (error) {
-      alert("Invalid JSON data. Please try again.");
-      console.error("Error parsing manually entered JSON data:", error.message);
-    }
-  });
-}
-
-// Start the QR code scanner when the "Start Camera" button is clicked
-document.getElementById("startCameraButton").addEventListener("click", async () => {
-  const messageElement = document.getElementById("message");
-  messageElement.textContent = "Attempting to start the camera...";
-
-  // Check camera access
-  if (!await checkCameraAccess()) {
-    messageElement.textContent = "Camera access denied. Please grant camera permissions.";
-    return;
-  }
-
-  // Start the scanner
-  startScanner();
-});
-
-// Optionally, attempt to start the scanner automatically on page load
-window.addEventListener("load", async () => {
-  console.log("Page loaded. Attempting to start QR code scanner...");
-  if (await checkCameraAccess()) {
-    startScanner();
-  }
+// Process sync data when the page loads
+window.addEventListener("load", () => {
+  console.log("Page loaded. Attempting to process sync data...");
+  processSyncData();
 });
