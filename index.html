@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discuss.io Alarm Sync</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-scanner-element@2.0.0/dist/qrcode-scanner.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,10 +12,13 @@
       background-color: #f4f4f4;
       text-align: center;
     }
-    qrcode-scanner {
+    #qrScannerContainer {
       width: 200px;
       height: 200px;
       margin: 20px auto;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
     }
     .message {
       margin-top: 20px;
@@ -26,9 +28,11 @@
 </head>
 <body>
   <h1>Discuss.io Alarm Sync</h1>
-  <qrcode-scanner id="qrScanner" result-format="json" on-qrcode-scanned="handleQrCodeScanned(event)"></qrcode-scanner>
-  <div class="message" id="message"></div>
+  <div id="qrScannerContainer"></div>
+  <div class="message" id="message">Scan the QR code to sync alarms.</div>
 
+  <!-- Include the html5-qrcode library -->
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.0.9/html5-qrcode.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
