@@ -24,12 +24,41 @@
       margin-top: 20px;
       font-size: 16px;
     }
+    .manual-input {
+      margin-top: 20px;
+      display: none; /* Initially hidden */
+    }
+    .manual-input textarea {
+      width: 90%;
+      height: 100px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .manual-input button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .manual-input button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
   <h1>Discuss.io Alarm Sync</h1>
   <div id="qrScannerContainer"></div>
-  <div class="message" id="message">Scan the QR code to sync alarms.</div>
+  <div class="message" id="message">Point your camera at the QR code to scan.</div>
+
+  <!-- Manual Input Fallback -->
+  <div class="manual-input" id="manualInputContainer">
+    <textarea id="manualInput" placeholder="Paste JSON data here..."></textarea>
+    <button id="submitManualInput">Sync Alarms</button>
+  </div>
 
   <!-- Include the html5-qrcode library -->
   <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.0.9/html5-qrcode.min.js"></script>
