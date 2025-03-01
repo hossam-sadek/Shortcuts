@@ -23,7 +23,8 @@ function startScanner() {
     })
     .catch((error) => {
       console.error("Error starting QR code scanner:", error);
-      messageElement.textContent = "Unable to start the QR code scanner. Please check your camera permissions.";
+      messageElement.textContent = "Unable to start the QR code scanner. Please use the manual input below.";
+      showManualInput();
     });
 }
 
@@ -66,7 +67,8 @@ function handleQrCodeScanned(decodedText) {
 function handleError(error) {
   console.error("QR code scanner error:", error);
   const messageElement = document.getElementById("message");
-  messageElement.textContent = "Error scanning QR code. Please ensure your camera is working and try again.";
+  messageElement.textContent = "Error scanning QR code. Please use the manual input below.";
+  showManualInput();
 }
 
 // Function to create a local notification
@@ -94,6 +96,47 @@ function createNotification(sessionId, projectName, alarmTime, sFlagLink) {
 // Request notification permission on load
 if ("Notification" in window && Notification.permission !== "granted") {
   Notification.requestPermission();
+}
+
+// Show the manual input container
+function showManualInput() {
+  const manualInputContainer = document.getElementById("manualInputContainer");
+  manualInputContainer.style.display = "block";
+
+  // Handle manual input submission
+  document.getElementById("submitManualInput").addEventListener("click", () => {
+    const manualInput = document.getElementById("manualInput").value.trim();
+    if (!manualInput) {
+      alert("Please enter valid JSON data.");
+      return;
+    }
+
+    try {
+      const jsonData = JSON.parse(manualInput);
+      if (!jsonData.sessions || jsonData.sessions.length === 0) {
+        alert("No sessions found in the provided JSON data.");
+        return;
+      }
+
+      console.log("Manually entered session data:", jsonData.sessions);
+      document.getElementById("message").textContent = "Manually entered session data processed successfully!";
+
+      // Create alarms for each session
+      jsonData.sessions.forEach((session, index) => {
+        const alarmTime = new Date(session.alarmTime);
+        if (alarmTime < new Date()) {
+          console.warn(`Skipping session ${session.sessionId} as its alarm time has already passed.`);
+          return;
+        }
+
+        // Create a notification for the session
+        createNotification(session.sessionId, session.projectName, alarmTime, session.sFlagLink);
+      });
+    } catch (error) {
+      alert("Invalid JSON data. Please try again.");
+      console.error("Error parsing manually entered JSON data:", error.message);
+    }
+  });
 }
 
 // Start the QR code scanner when the page loads
