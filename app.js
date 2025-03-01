@@ -22,9 +22,18 @@ function startScanner() {
   const qrScannerContainer = document.getElementById("qrScannerContainer");
   const messageElement = document.getElementById("message");
 
-  console.log("Starting QR code scanner...");
+  console.log("Attempting to start the camera...");
 
-  // Configure the scanner
+  // Clean up any existing scanner
+  if (html5QrcodeScanner) {
+    html5QrcodeScanner.stop().then(() => {
+      console.log("Existing QR code scanner stopped.");
+    }).catch((error) => {
+      console.error("Error stopping existing QR code scanner:", error);
+    });
+  }
+
+  // Initialize the scanner
   html5QrcodeScanner = new Html5Qrcode("qrScannerContainer");
 
   // Start the camera
@@ -85,7 +94,7 @@ function handleQrCodeScanned(decodedText) {
 function handleError(error) {
   console.error("QR code scanner error:", error);
   const messageElement = document.getElementById("message");
-  messageElement.textContent = "Error scanning QR code. Please use the manual input below.";
+  messageElement.textContent = "Error scanning QR code. Please try again or use the manual input below.";
   showManualInput();
 }
 
@@ -172,7 +181,7 @@ document.getElementById("startCameraButton").addEventListener("click", async () 
   startScanner();
 });
 
-// Start the QR code scanner when the page loads (optional)
+// Optionally, attempt to start the scanner automatically on page load
 window.addEventListener("load", async () => {
   console.log("Page loaded. Attempting to start QR code scanner...");
   if (await checkCameraAccess()) {
