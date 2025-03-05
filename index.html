@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discuss.io Alarm Sync</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background-color: #f4f4f4;
-      text-align: center;
-    }
-    .message {
-      margin-top: 20px;
-      font-size: 16px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect to Discuss.io</title>
 </head>
 <body>
-  <h1>Discuss.io Alarm Sync</h1>
-  <div class="message" id="message">Loading session data...</div>
+    <h1>Click the button to go to Discuss.io and allow camera/microphone access</h1>
 
-  <script src="app.js"></script>
+    <!-- Button to redirect to Discuss.io -->
+    <button id="redirectButton">Go to Discuss.io</button>
+
+    <script>
+        // Add click event listener to the button
+        document.getElementById("redirectButton").addEventListener("click", function() {
+            // Redirect to the Discuss.io link where the user will grant permission
+            window.location.href = "https://app.discuss.io/966611/d"; // Replace with the URL
+        });
+    </script>
 </body>
 </html>
